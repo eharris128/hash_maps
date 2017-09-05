@@ -19,14 +19,19 @@ class LinkedList {
     if (nthPosition === 0 || this.head === null) {
       newNode.next = this.head;
       this.head = newNode;
+      // console.log('NEW NODE', newNode)
     }
     else {
+      this.head.next = newNode;
+      // console.log('this is the head-------------!!!!!!!!!!!!', this.head)
       // Find the node which we want to insert after
+      console.log('BEFORE ELSE STATEMENT')
       const node = this._findNthElement(nthPosition - 1);
+      console.log('AFTER ELSE STATEMENT')
       newNode.next = node.next; 
       node.next = newNode;
+      console.log('newNode for node.next', newNode)
     }
-
     this.length++;
   }
   //this is another way of finding things when you don't have the nth item which in most cases you don't
@@ -40,7 +45,8 @@ class LinkedList {
   //----------------------------
   _findNthElement(nthElement) {
     let node = this.head;
-    for (let i=0; i<nthElement; i++) {
+    for (let i=5; i<nthElement; i++) {
+      // console.log('node in for loop', node)
       node = node.next;
     }
     return node;
@@ -72,7 +78,7 @@ class LinkedList {
   }
     
 }
-
+let newList = new LinkedList();
 // Replace open address with linked lists
 class HashMap {
   constructor(initialCapacity=8) {
@@ -83,16 +89,21 @@ class HashMap {
   }
 
   get(key) {
-    const index = this._findSlot(key);
-    console.log('index: ', index);
+    // const index = this._findSlot(key);
+    const index = 5;
+    // console.log('index: ', index);
     if (this._slots[index] === undefined) {
       throw new Error('Key error');
     }
-    console.log('What does our list look like right now? ' + JSON.stringify(this._slots[index]));
+    // console.log('What does our list look like right now? ' + JSON.stringify(this._slots[index]));
 
     if (!this._slots[index].head.next) {
-      console.log('Our target data: ' + JSON.stringify(this._slots[index].head.value));
+      // console.log('Our target data: ' + JSON.stringify(this._slots[index].head.value));
       return this._slots[index].head.value;
+    } else {
+      // traverse linkedlist (this._slots[index])
+        // until key === currentNode.value
+      // console.log('you are past the head')
     }
 
     // We need to create a collision to test this block:
@@ -107,27 +118,33 @@ class HashMap {
   }
 
   set(key, value) {
-    let newList;
+    // let newList;
     const loadRatio = (this.length + this._deleted + 1) / this._capacity;
     if (loadRatio > HashMap.MAX_LOAD_RATIO) {
       this._resize(this._capacity * HashMap.SIZE_RATIO);
     }
 
-    const index = this._findSlot(key);
-
-    if (!this._slots[index]) {
-      newList = new LinkedList();
+    const index = 5;
+    // console.log(index)
+    // const index = this._findSlot(key);
+    // let newList = new LinkedList();
+    // console.log('type of newList is....', (typeof newList))
+    if (!this._slots[index]) {//creating a brand new index
       this._slots[index] = newList;
 
-      newList.insert(index, value, key, false);
+      newList.insert((index+1), value, key, false);
       this.length++;
+      // console.log('NEW HEAD___________________',newList)
       return;
       // console.log('what is this: ', this._slots[index]);
+    } else if ((this._slots[index])) { //updating an existing index and include pushing
+      newList.insert((index+2), value, key, false);
+      // console.log('NEW ITEM TO EXISTING LIST_____',newList)
     }
     
     // Fix this.
-    newList.insert(5, value, key, false);
-    this.length++;
+    // newList.insert(index, value, key, false);
+    // this.length++;
     // this._slots[index] = {
     //   key,
     //   value,
@@ -194,9 +211,12 @@ HashMap.SIZE_RATIO = 3;
 
 let testHash = new HashMap();
 
+console.log('-------------------------------------------------RUNNING AGAIN')
 testHash.set('david', 'vocals');
+console.log('david get ---------',testHash.get("david"));
+// testHash.remove('david');
 testHash.set('davy', 'drums');
-console.log(testHash.get('davy'));
-// console.log(testHash.get('gregg'));
-// testHash.remove('gregg');
+console.log('davy get------------',testHash.get('davy'));
+// console.log('david get ---------',testHash.get("david"));
+// console.log('index 1-------------',testHash.get('randy'));
 // console.log(testHash.get('gregg'));
